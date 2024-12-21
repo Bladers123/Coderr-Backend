@@ -31,9 +31,11 @@ class RegistrationsViewSet(CreateModelMixin, GenericViewSet):
 
         return Response(
             {
-                "token": token.key,
-                "user_id": user.id,
-                "username": user.username,
+                'message': 'Erfolgreiche Registrierung',
+                'token': token.key,
+                'username': user.username,
+                'email': user.email,
+                'user_id': user.id
             },
             status=status.HTTP_201_CREATED
         )
@@ -52,7 +54,6 @@ class LoginView(GenericAPIView):
             {
                 'message': 'Erfolgreiche Anmeldung',
                 'token': token.key,
-                'id': user.id,
                 'username': user.username,
                 'email': user.email,
                 'user_id': user.id
