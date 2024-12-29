@@ -13,10 +13,9 @@ class Offer(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     min_price = models.DecimalField(max_digits=10, decimal_places=2)
     min_delivery_time = models.IntegerField(help_text="Minimum delivery time in days")
-    creator_id = filters.NumberFilter(field_name='user__id', lookup_expr='exact')
 
-    class Meta:
-        ordering = ['-created_at']  # Standard-Sortierung
+    # class Meta:
+    #     ordering = ['-created_at']  # Standard-Sortierung
 
 
     def __str__(self):
@@ -29,3 +28,4 @@ class OfferDetail(models.Model):
 
     def __str__(self):
         return self.url
+

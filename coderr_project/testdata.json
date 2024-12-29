@@ -1,40 +1,44 @@
 {
     "users": [
         {
-            "id": 1,
-            "username": "user1",
-            "email": "user1@example.com",
-            "password": "password123"
-        },
-        {
             "id": 2,
             "username": "user2",
             "email": "user2@example.com",
-            "password": "password123"
+            "password": "password123",
+            "first_name": "John",
+            "last_name": "Doe"
         },
         {
             "id": 3,
             "username": "user3",
             "email": "user3@example.com",
-            "password": "password123"
+            "password": "password123",
+            "first_name": "Jane",
+            "last_name": "Smith"
         },
         {
             "id": 4,
             "username": "user4",
             "email": "user4@example.com",
-            "password": "password123"
+            "password": "password123",
+            "first_name": "Rocky",
+            "last_name": "Loko"
         },
         {
             "id": 5,
             "username": "user5",
             "email": "user5@example.com",
-            "password": "password123"
+            "password": "password123",
+            "first_name": "Albert",
+            "last_name": "Grunz"
         },
         {
             "id": 6,
             "username": "user6",
             "email": "user6@example.com",
-            "password": "password123"
+            "password": "password123",
+            "first_name": "Carlo",
+            "last_name": "Rabbel"
         }
     ],
     "offers": [

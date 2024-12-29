@@ -19,7 +19,9 @@ try:
                 id=user_data["id"],
                 username=user_data["username"],
                 email=user_data["email"],
-                password=user_data["password"]
+                password=user_data["password"],
+                last_name=user_data["last_name"],
+                first_name=user_data["first_name"]
             )
     print(f"Benutzer wurden erstellt.")
 

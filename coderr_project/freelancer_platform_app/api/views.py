@@ -7,15 +7,16 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 
 
+
 class OfferViewSet(viewsets.ModelViewSet):
-    queryset = Offer.objects.prefetch_related('details').all()
+    queryset = Offer.objects.select_related('user').prefetch_related('details').all()
     serializer_class = OfferSerializer
     permission_classes = [IsAuthenticated]
-    # filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     # pagination_class = None
 
-    # filterset_fields = ['creator_id', 'price', 'created_at']
-    # search_fields = ['min_price', 'created_at']
+    filterset_fields = ['min_price', 'min_delivery_time']
+    search_fields = ['min_price', 'created_at']
     # ordering_fields = ['min_price', 'created_at']
 
 
