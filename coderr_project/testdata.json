@@ -1,0 +1,112 @@
+{
+    "users": [
+        {
+            "id": 1,
+            "username": "user1",
+            "email": "user1@example.com",
+            "password": "password123"
+        },
+        {
+            "id": 2,
+            "username": "user2",
+            "email": "user2@example.com",
+            "password": "password123"
+        },
+        {
+            "id": 3,
+            "username": "user3",
+            "email": "user3@example.com",
+            "password": "password123"
+        },
+        {
+            "id": 4,
+            "username": "user4",
+            "email": "user4@example.com",
+            "password": "password123"
+        },
+        {
+            "id": 5,
+            "username": "user5",
+            "email": "user5@example.com",
+            "password": "password123"
+        },
+        {
+            "id": 6,
+            "username": "user6",
+            "email": "user6@example.com",
+            "password": "password123"
+        }
+    ],
+    "offers": [
+        {
+            "id": 1,
+            "user_id": 1,
+            "title": "Angebot 1",
+            "description": "Beschreibung für Angebot 1",
+            "min_price": 100.00,
+            "min_delivery_time": 3,
+            "details": [
+                {"url": "https://example.com/angebot1-detail1"},
+                {"url": "https://example.com/angebot1-detail2"}
+            ]
+        },
+        {
+            "id": 2,
+            "user_id": 2,
+            "title": "Angebot 2",
+            "description": "Beschreibung für Angebot 2",
+            "min_price": 150.00,
+            "min_delivery_time": 5,
+            "details": [
+                {"url": "https://example.com/angebot2-detail1"}
+            ]
+        },
+        {
+            "id": 3,
+            "user_id": 3,
+            "title": "Angebot 3",
+            "description": "Beschreibung für Angebot 3",
+            "min_price": 200.00,
+            "min_delivery_time": 7,
+            "details": [
+                {"url": "https://example.com/angebot3-detail1"},
+                {"url": "https://example.com/angebot3-detail2"}
+            ]
+        },
+        {
+            "id": 4,
+            "user_id": 4,
+            "title": "Angebot 4",
+            "description": "Beschreibung für Angebot 4",
+            "min_price": 250.00,
+            "min_delivery_time": 10,
+            "details": [
+                {"url": "https://example.com/angebot4-detail1"}
+            ]
+        },
+        {
+            "id": 5,
+            "user_id": 5,
+            "title": "Angebot 5",
+            "description": "Beschreibung für Angebot 5",
+            "min_price": 300.00,
+            "min_delivery_time": 15,
+            "details": [
+                {"url": "https://example.com/angebot5-detail1"},
+                {"url": "https://example.com/angebot5-detail2"},
+                {"url": "https://example.com/angebot5-detail3"}
+            ]
+        },
+        {
+            "id": 6,
+            "user_id": 6,
+            "title": "Angebot 6",
+            "description": "Beschreibung für Angebot 6",
+            "min_price": 350.00,
+            "min_delivery_time": 20,
+            "details": [
+                {"url": "https://example.com/angebot6-detail1"}
+            ]
+        }
+    ]
+}
