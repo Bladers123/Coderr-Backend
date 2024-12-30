@@ -41,7 +41,7 @@ def main():
 
                 # 3. Testdaten laden
                 print("4. Testdaten werden geladen...")
-                exec(open("testdata_script.py").read())
+                exec(open("test_data_script.py").read())
                 print("Testdaten wurden erfolgreich geladen.")
             except Exception as e:
                 print(f"Fehler beim Ausführen der Schritte: {e}")

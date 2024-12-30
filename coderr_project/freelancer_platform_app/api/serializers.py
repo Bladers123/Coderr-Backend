@@ -27,40 +27,92 @@ class OfferDetailSerializer(serializers.ModelSerializer):
         return data
 
 
-class OfferWriteSerializer(serializers.ModelSerializer):
+
+
+
+
+class OfferSerializer(serializers.ModelSerializer):
+    user_details = UserDetailSerializer(source='user', read_only=True)    
     details = OfferDetailSerializer(many=True)
 
     class Meta:
         model = Offer
-        # Hier ggf. Felder definieren, die du beim POST/PUT/PATCH
-        # bearbeiten können möchtest:
-        fields = ['id', 'title', 'image', 'description', 'details']
-
-    def validate(self, data):
-        # Deine bereits vorhandenen Validierungen (z. B. Anzahl Details, offer_types usw.)
-        if len(data['details']) != 3:
-            raise serializers.ValidationError("Es müssen genau drei Angebotsdetails angegeben werden.")
-        offer_types = [detail['offer_type'] for detail in data['details']]
-        if sorted(offer_types) != ['basic', 'premium', 'standard']:
-            raise serializers.ValidationError("Es müssen die Typen 'basic', 'standard' und 'premium' enthalten sein.")
-        return data
+        fields = [
+            'id', 'user', 'title', 'image', 'description', 'created_at',
+            'updated_at', 'min_price', 'min_delivery_time', 'details', 'user_details'
+        ]
 
     def create(self, validated_data):
-        details_data = validated_data.pop('details')
+        # Hier holen wir uns die "details"-Liste aus den validierten Daten
+        details_data = validated_data.pop('details', [])
+        # Erstellen das Offer
         offer = Offer.objects.create(**validated_data)
-        for detail_data in details_data:
-            OfferDetail.objects.create(offer=offer, **detail_data)
+        # Erstellen die OfferDetail-Einträge
+        for detail_dict in details_data:
+            OfferDetail.objects.create(offer=offer, **detail_dict)
         return offer
 
-    
-class OfferReadSerializer(serializers.ModelSerializer):
-    """Nur Felder fürs Anzeigen (GET)"""
-    details = OfferDetailSerializer(many=True, read_only=True)
-    user_details = UserDetailSerializer(source='user', read_only=True)
+    def update(self, instance, validated_data):
+        # Falls du Updates an den Details erlauben willst, 
+        # müsstest du hier eine Logik implementieren.
+        details_data = validated_data.pop('details', None)
+        
+        # Erst die restlichen Felder vom Offer updaten
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        
+        if details_data is not None:
+            # Beispiel: Alte Details löschen und neue erstellen
+            instance.details.all().delete()
+            for detail_dict in details_data:
+                OfferDetail.objects.create(offer=instance, **detail_dict)
+        
+        return instance
 
-    class Meta:
-        model = Offer
-        fields = ['id', 'user', 'title', 'image', 'description', 'created_at', 'updated_at', 'details', 'min_price', 'min_delivery_time', 'user_details']
+    def to_representation(self, instance):
+        """
+        Du kannst hier (optional) unterscheiden, ob du im 'list' oder 'retrieve'
+        bist, und die Ausgabe von `details` anpassen (Kurzinfo oder Vollformat).
+        """
+        rep = super().to_representation(instance)
+        action = self.context.get('action', '')
+
+        # get nach dem post
+        if action == 'create':
+            rep.pop('min_price', None)
+            rep.pop('min_delivery_time', None)
+            rep.pop('user_details', None)
+            rep.pop('created_at', None)
+            rep.pop('updated_at', None)
+            rep.pop('user', None)
+
+        
+        # get von der liste
+        elif action == 'list':
+            # Kurzformat => Nur ID + URL
+            rep['details'] = [
+                {'id': d['id'], 'url': f"/offerdetails/{d['id']}/"}
+                for d in rep.get('details', [])
+            ]
+
+        # get von einem einzelnen objekt
+        elif action == 'retrieve':
+            rep.pop('min_price', None)
+            rep.pop('min_delivery_time', None)
+            rep.pop('user_details', None)
+        return rep
+
+
+
+
+
+
+
+
+
+
+
 
 class FileUploadSerializer(serializers.ModelSerializer):
     class Meta:

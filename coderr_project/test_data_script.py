@@ -5,7 +5,7 @@ from freelancer_platform_app.models import Offer, OfferDetail
 User = get_user_model()
 
 # Datei einlesen
-file_path = "testdata.json"
+file_path = "test_data.json"
 
 try:
     # 1. JSON-Daten laden
@@ -34,4 +34,9 @@ except Exception as e:
 
 # python manage.py shell
 # exec(open("testdata_script.py").read())
+
+
+
+
+
 
