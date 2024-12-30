@@ -25,33 +25,6 @@ try:
             )
     print(f"Benutzer wurden erstellt.")
 
-    # 3. Angebote erstellen
-    for offer_data in data.get("offers", []):
-        try:
-            user = User.objects.get(id=offer_data["user_id"])
-
-            # Angebot prüfen und erstellen
-            if not Offer.objects.filter(id=offer_data["id"]).exists():
-                offer = Offer.objects.create(
-                    user=user,
-                    title=offer_data["title"],
-                    description=offer_data["description"],
-                    min_price=offer_data["min_price"],
-                    min_delivery_time=offer_data["min_delivery_time"]
-                )
-
-                # Angebotsdetails hinzufügen
-                for detail in offer_data.get("details", []):
-                    if not OfferDetail.objects.filter(offer=offer, url=detail["url"]).exists():
-                        OfferDetail.objects.create(offer=offer, url=detail["url"])
-            else:
-                print(f"Angebot mit ID {offer_data['id']} existiert bereits.")
-
-        except User.DoesNotExist:
-            print(f"Benutzer mit ID {offer_data['user_id']} existiert nicht.")
-
-    print(f"Angebote wurden erstellt.")
-
 except FileNotFoundError:
     print(f"Die Datei '{file_path}' wurde nicht gefunden.")
 except Exception as e:
