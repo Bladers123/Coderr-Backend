@@ -1,7 +1,7 @@
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
-from ..models import Offer, OfferDetail
-from .serializers import OfferSerializer, OfferDetailSerializer, FileUploadSerializer
+from ..models import Offer, OfferDetail, Order
+from .serializers import OfferSerializer, OfferDetailSerializer, FileUploadSerializer, OrderSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
 from ..models import FileUpload
@@ -48,3 +48,17 @@ class FileUploadView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
+
+
+
+
+class OrderViewSet(viewsets.ModelViewSet):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated]
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        # Hier geben wir ein leeres Objekt zurück und ändern den Statuscode
+        return Response({}, status=status.HTTP_200_OK)

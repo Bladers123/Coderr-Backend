@@ -10,8 +10,6 @@ class OfferFilter(filters.FilterSet):
     max_delivery_time = filters.NumberFilter(field_name='min_delivery_time', lookup_expr='lte')  # minimale Lieferzeit
     search = filters.CharFilter(method='filter_search')
 
-
-
     class Meta:
         model = Offer
         fields = ['creator_id', 'min_price', 'max_delivery_time']  # Existierende Felder im Modell

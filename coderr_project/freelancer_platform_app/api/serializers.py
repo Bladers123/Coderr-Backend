@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models import Offer, OfferDetail
+from ..models import Offer, OfferDetail, Order
 from django.contrib.auth.models import User
 from ..models import FileUpload
 
@@ -106,15 +106,15 @@ class OfferSerializer(serializers.ModelSerializer):
 
 
 
-
-
-
-
-
-
-
-
 class FileUploadSerializer(serializers.ModelSerializer):
     class Meta:
         model = FileUpload
         fields = ['file', 'uploaded_at']
+
+
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = ['id', 'user', 'customer_user', 'business_user', 'title', 'revisions', 'delivery_time_in_days', 'price', 'features', 'offer_type', 'status', 'created_at', 'updated_at']
