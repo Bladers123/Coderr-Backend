@@ -18,9 +18,10 @@ class Offer(models.Model):
     title = models.CharField(max_length=255, default="Default Title")
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+    creator_id = models.IntegerField(User, default=1)
     updated_at = models.DateTimeField(auto_now=True)
-    min_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    min_delivery_time = models.IntegerField(help_text="Minimum delivery time in days", blank=True, null=True)
+    min_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    min_delivery_time = models.IntegerField(help_text="Minimum delivery time in days", default=1)
     image = models.ForeignKey(FileUpload, on_delete=models.SET_NULL, null=True, blank=True)
 
 
