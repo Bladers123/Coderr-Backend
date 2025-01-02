@@ -58,3 +58,15 @@ class Order(models.Model):
 
     def __str__(self):
         return f"Order {self.id} for {self.offer.title} - {self.offer_detail.title}"
+    
+
+
+
+class OrderCount(models.Model):
+    business_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    order_count = models.IntegerField(default=0)
+
+
+class CompletedOrderCount(models.Model):
+    business_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    completed_order_count = models.IntegerField(default=0)

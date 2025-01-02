@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models import Offer, OfferDetail, Order
+from ..models import Offer, OfferDetail, Order, OrderCount
 from django.contrib.auth.models import User
 from ..models import FileUpload
 
@@ -118,3 +118,18 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ['id', 'user', 'customer_user', 'business_user', 'title', 'revisions', 'delivery_time_in_days', 'price', 'features', 'offer_type', 'status', 'created_at', 'updated_at']
+
+
+
+
+
+
+
+
+
+class OrderCountSerializer(serializers.Serializer):
+    order_count = serializers.IntegerField()
+
+
+class CompletedOrderCountSerializer(serializers.Serializer):
+    completed_order_count = serializers.IntegerField()
