@@ -1,6 +1,6 @@
 from rest_framework import routers
 from django.urls import path, include
-from .views import OfferViewSet, OfferDetailViewSet, OrderViewSet, OrderCountView, CompletedOrderCountView, BaseInfoView
+from .views import OfferViewSet, OfferDetailViewSet, OrderViewSet, OrderCountView, CompletedOrderCountView, BaseInfoView, ProfileViewSet, BusinessProfileViewSet, CustomerProfileViewSet
 from django.conf import settings
 from django.conf.urls.static import static
 from .views import FileUploadView
@@ -14,6 +14,9 @@ router = routers.DefaultRouter()
 router.register(r'offers', OfferViewSet, basename='offer')
 router.register(r'offerdetails', OfferDetailViewSet, basename='offerdetail')
 router.register(r'orders', OrderViewSet, basename='order')
+router.register(r'profiles', ProfileViewSet, basename='profile')
+router.register(r'profiles/business', BusinessProfileViewSet, basename='businessprofile')
+router.register(r'profiles/customer', CustomerProfileViewSet, basename='customerprofile')
 
 
 urlpatterns = [

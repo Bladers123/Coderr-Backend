@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models import Offer, OfferDetail, Order, OrderCount
+from ..models import BusinessProfile, CustomerProfile, Offer, OfferDetail, Order, OrderCount, Profile
 from django.contrib.auth.models import User
 from ..models import FileUpload
 
@@ -135,3 +135,45 @@ class BaseInfoSerializer(serializers.Serializer):
     average_rating = serializers.FloatField()
     business_profile_count = serializers.IntegerField()
     offer_count = serializers.IntegerField()
+
+
+
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = [
+            'id',
+            'user',
+            'username',
+            'first_name',
+            'last_name',
+            'file',
+            'location',
+            'tel',
+            'description',
+            'working_hours',
+            'type',
+            'email',
+            'created_at',
+        ]
+
+
+class BusinessProfileSerializer(ProfileSerializer):
+    class Meta(ProfileSerializer.Meta):
+        model = BusinessProfile
+        fields = ProfileSerializer.Meta.fields + [
+            'business_name',
+        ]
+
+
+class CustomerProfileSerializer(ProfileSerializer):
+    class Meta(ProfileSerializer.Meta):
+        model = CustomerProfile
+        fields = ProfileSerializer.Meta.fields + [
+            'uploaded_at',
+            'customer_name',
+        ]
+
+

@@ -72,10 +72,41 @@ class CompletedOrderCount(models.Model):
     completed_order_count = models.IntegerField(default=0)
 
 
-
-
 class BaseInfo(models.Model):
     review_count = models.IntegerField(default=0)
     average_rating = models.FloatField(default=0.0)
     business_profile_count = models.IntegerField(default=0)
     offer_count = models.IntegerField(default=0)
+
+
+
+
+class Profile(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    username = models.CharField(max_length=150, unique=True)
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
+    file = models.ForeignKey('FileUpload', on_delete=models.SET_NULL, null=True, blank=True)
+    location = models.CharField(max_length=255, blank=True)
+    tel = models.CharField(max_length=20, blank=True)
+    description = models.TextField(blank=True)
+    working_hours = models.CharField(max_length=255, blank=True)
+    type = models.CharField(max_length=20, choices=[('basic', 'Basic'), ('standard', 'Standard'), ('premium', 'Premium')], null=True, blank=True)
+    email = models.EmailField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.username} ({self.type})"
+
+class BusinessProfile(Profile):
+    business_name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.business_name
+
+class CustomerProfile(Profile):
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    customer_name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.customer_name
