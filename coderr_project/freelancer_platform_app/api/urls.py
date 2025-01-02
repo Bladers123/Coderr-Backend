@@ -1,6 +1,6 @@
 from rest_framework import routers
 from django.urls import path, include
-from .views import OfferViewSet, OfferDetailViewSet, OrderViewSet, OrderCountView, CompletedOrderCountView
+from .views import OfferViewSet, OfferDetailViewSet, OrderViewSet, OrderCountView, CompletedOrderCountView, BaseInfoView
 from django.conf import settings
 from django.conf.urls.static import static
 from .views import FileUploadView
@@ -20,7 +20,8 @@ urlpatterns = [
     path('', include(router.urls)),
     path('upload/', FileUploadView.as_view(), name='file-upload'),
     path('order-count/<int:pk>/', OrderCountView.as_view(), name='order-count'),
-    path('completed-order-count/<int:pk>/', CompletedOrderCountView.as_view(), name='completed-order-count')
+    path('completed-order-count/<int:pk>/', CompletedOrderCountView.as_view(), name='completed-order-count'),
+    path('base-info/', BaseInfoView.as_view(), name='base-info')
 ]
 
 

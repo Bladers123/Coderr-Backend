@@ -122,14 +122,16 @@ class OrderSerializer(serializers.ModelSerializer):
 
 
 
-
-
-
-
-
 class OrderCountSerializer(serializers.Serializer):
     order_count = serializers.IntegerField()
 
 
 class CompletedOrderCountSerializer(serializers.Serializer):
     completed_order_count = serializers.IntegerField()
+
+
+class BaseInfoSerializer(serializers.Serializer):
+    review_count = serializers.IntegerField()
+    average_rating = serializers.FloatField()
+    business_profile_count = serializers.IntegerField()
+    offer_count = serializers.IntegerField()

@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from ..models import Offer, OfferDetail, Order, OrderCount
-from .serializers import CompletedOrderCountSerializer, OfferSerializer, OfferDetailSerializer, FileUploadSerializer, OrderCountSerializer, OrderSerializer
+from .serializers import BaseInfoSerializer, CompletedOrderCountSerializer, OfferSerializer, OfferDetailSerializer, FileUploadSerializer, OrderCountSerializer, OrderSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
 from ..models import FileUpload
@@ -112,4 +112,27 @@ class CompletedOrderCountView(APIView):
 
         # Nutze den Serializer zur Validierung und Ausgabe
         serializer = CompletedOrderCountSerializer(data)
+        return Response(serializer.data)
+    
+
+
+
+
+class BaseInfoView(APIView):
+    def get(self, request):
+        
+
+        # Anzahl der Offers
+        offer_count = Offer.objects.count()
+
+        # Erstelle die Daten
+        data = {
+            "offer_count": offer_count,
+            "review_count": 10,
+            "average_rating": 4.6,
+            "business_profile_count": 45,
+        }
+
+        # Nutze den Serializer zur Validierung und Ausgabe
+        serializer = BaseInfoSerializer(data)
         return Response(serializer.data)

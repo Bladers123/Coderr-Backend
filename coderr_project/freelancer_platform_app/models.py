@@ -70,3 +70,12 @@ class OrderCount(models.Model):
 class CompletedOrderCount(models.Model):
     business_user = models.ForeignKey(User, on_delete=models.CASCADE)
     completed_order_count = models.IntegerField(default=0)
+
+
+
+
+class BaseInfo(models.Model):
+    review_count = models.IntegerField(default=0)
+    average_rating = models.FloatField(default=0.0)
+    business_profile_count = models.IntegerField(default=0)
+    offer_count = models.IntegerField(default=0)
