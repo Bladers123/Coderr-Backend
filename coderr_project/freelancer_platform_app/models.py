@@ -62,15 +62,6 @@ class Order(models.Model):
 
 
 
-class OrderCount(models.Model):
-    business_user = models.ForeignKey(User, on_delete=models.CASCADE)
-    order_count = models.IntegerField(default=0)
-
-
-class CompletedOrderCount(models.Model):
-    business_user = models.ForeignKey(User, on_delete=models.CASCADE)
-    completed_order_count = models.IntegerField(default=0)
-
 
 class BaseInfo(models.Model):
     review_count = models.IntegerField(default=0)

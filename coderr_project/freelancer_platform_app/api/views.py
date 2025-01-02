@@ -1,7 +1,6 @@
-from django.shortcuts import get_object_or_404
-from rest_framework import viewsets, filters
+from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
-from ..models import BusinessProfile, CustomerProfile, Offer, OfferDetail, Order, OrderCount, Profile
+from ..models import BusinessProfile, CustomerProfile, Offer, OfferDetail, Order, Profile
 from .serializers import BaseInfoSerializer, BusinessProfileSerializer, CompletedOrderCountSerializer, CustomerProfileSerializer, OfferSerializer, OfferDetailSerializer, FileUploadSerializer, OrderCountSerializer, OrderSerializer, ProfileSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
@@ -10,8 +9,6 @@ from rest_framework.views import APIView
 from rest_framework import status
 from .filters import OfferFilter
 from django.contrib.auth import get_user_model
-from django.views.generic.detail import DetailView
-from rest_framework.generics import RetrieveAPIView
 from rest_framework.exceptions import NotFound
 
 
@@ -153,3 +150,10 @@ class BusinessProfileViewSet(viewsets.ModelViewSet):
 class CustomerProfileViewSet(viewsets.ModelViewSet):
     queryset = CustomerProfile.objects.all()
     serializer_class = CustomerProfileSerializer
+
+
+
+
+class ReviewViewSet(viewsets.ModelViewSet):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer

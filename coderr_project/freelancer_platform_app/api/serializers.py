@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models import BusinessProfile, CustomerProfile, Offer, OfferDetail, Order, OrderCount, Profile
+from ..models import BusinessProfile, CustomerProfile, Offer, OfferDetail, Order, Profile
 from django.contrib.auth.models import User
 from ..models import FileUpload
 
