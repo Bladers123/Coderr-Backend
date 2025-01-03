@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models import BusinessProfile, CustomerProfile, Offer, OfferDetail, Order, Profile
+from ..models import BusinessProfile, CustomerProfile, Offer, OfferDetail, Order, Profile, Review
 from django.contrib.auth.models import User
 from ..models import FileUpload
 
@@ -177,3 +177,15 @@ class CustomerProfileSerializer(ProfileSerializer):
         ]
 
 
+class ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Review
+        fields = [
+            'id',
+            'business_user',
+            'reviewer',
+            'rating',
+            'description',
+            'created_at',
+            'updated_at',
+        ]

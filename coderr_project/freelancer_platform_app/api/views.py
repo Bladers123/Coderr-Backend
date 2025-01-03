@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
-from ..models import BusinessProfile, CustomerProfile, Offer, OfferDetail, Order, Profile
-from .serializers import BaseInfoSerializer, BusinessProfileSerializer, CompletedOrderCountSerializer, CustomerProfileSerializer, OfferSerializer, OfferDetailSerializer, FileUploadSerializer, OrderCountSerializer, OrderSerializer, ProfileSerializer
+from ..models import BusinessProfile, CustomerProfile, Offer, OfferDetail, Order, Profile, Review
+from .serializers import BaseInfoSerializer, BusinessProfileSerializer, CompletedOrderCountSerializer, CustomerProfileSerializer, OfferSerializer, OfferDetailSerializer, FileUploadSerializer, OrderCountSerializer, OrderSerializer, ProfileSerializer, ReviewSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
 from ..models import FileUpload
@@ -155,5 +155,5 @@ class CustomerProfileViewSet(viewsets.ModelViewSet):
 
 
 class ReviewViewSet(viewsets.ModelViewSet):
-    queryset = Profile.objects.all()
-    serializer_class = ProfileSerializer
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
