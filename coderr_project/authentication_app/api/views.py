@@ -15,12 +15,12 @@ from ..models import CustomUser
 User = get_user_model()
 
 
-class UsersViewSet(ReadOnlyModelViewSet):
+class UserViewSet(ReadOnlyModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
     permission_classes = [IsAdminUser]
 
-class RegistrationsViewSet(CreateModelMixin, GenericViewSet):
+class RegistrationViewSet(CreateModelMixin, GenericViewSet):
     queryset = User.objects.all()
     serializer_class = RegistrationSerializer
 
