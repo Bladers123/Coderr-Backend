@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet, GenericViewSet, ViewSet
-from .serializers import UserSerializer, RegistrationSerializer, LoginSerializer
+from .serializers import CustomUserSerializer, RegistrationSerializer, LoginSerializer
 from rest_framework.permissions import IsAdminUser
 from rest_framework.mixins import CreateModelMixin
 from rest_framework.response import Response
@@ -9,14 +9,15 @@ from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import action
 from rest_framework.generics import GenericAPIView
+from ..models import CustomUser
 
 
 User = get_user_model()
 
 
 class UsersViewSet(ReadOnlyModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
     permission_classes = [IsAdminUser]
 
 class RegistrationsViewSet(CreateModelMixin, GenericViewSet):

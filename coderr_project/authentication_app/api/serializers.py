@@ -1,22 +1,27 @@
 from rest_framework import serializers
-from django.contrib.auth import get_user_model
 from rest_framework.exceptions import AuthenticationFailed
 from django.contrib.auth import authenticate
 from rest_framework import status
+from ..models import CustomUser
 
 
-
-
-class UserSerializer(serializers.ModelSerializer):
+class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = get_user_model()
-        fields = '__all__'
+        model = CustomUser
+        fields = [
+            field.name
+            for field in CustomUser._meta.get_fields()
+            if not field.is_relation or field.one_to_one or field.many_to_one
+        ]  # Nur konkrete Felder (keine umgekehrten Relationen)
+
+
+
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
     class Meta:
-        model = get_user_model()
-        fields = ('id', 'username', 'email', 'password')
+        model = CustomUser
+        fields = ('id', 'username', 'email', 'password', 'type')
 
 
 class LoginSerializer(serializers.Serializer):
