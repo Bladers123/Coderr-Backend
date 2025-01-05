@@ -1,7 +1,5 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
-
-from .permissons import IsOwnerOrReadOnly
 from ..models import BusinessProfile, CustomerProfile, Offer, OfferDetail, Order, Profile, Review
 from .serializers import BaseInfoSerializer, BusinessProfileSerializer, CompletedOrderCountSerializer, CustomerProfileSerializer, OfferSerializer, OfferDetailSerializer, FileUploadSerializer, OrderCountSerializer, OrderSerializer, ProfileSerializer, ReviewSerializer
 from django_filters.rest_framework import DjangoFilterBackend
@@ -12,7 +10,6 @@ from rest_framework import status
 from .filters import OfferFilter
 from django.contrib.auth import get_user_model
 from rest_framework.exceptions import NotFound
-from django.core.exceptions import PermissionDenied
 
 
 
@@ -137,38 +134,22 @@ class BaseInfoView(APIView):
         return Response(serializer.data)
     
 
+    
+
 class ProfileViewSet(viewsets.ModelViewSet):
     serializer_class = ProfileSerializer
 
-    def get_permissions(self):
-        """
-        Bestimmt die benötigten Berechtigungen je nach ViewSet-Aktion.
-        """
-        if self.action == 'list':
-            # Nur Admin-User dürfen die Liste aller Profile sehen
-            permission_classes = [IsAdminUser]
-        else:
-            # Bei allen anderen Aktionen (retrieve, update, delete etc.) 
-            # muss der User zumindest eingeloggt sein.
-            permission_classes = [IsAuthenticated]
-        return [permission() for permission in permission_classes]
-
     def get_queryset(self):
-        """
-        Gibt das passende QuerySet je nach User und Aktion zurück:
-        - Admin sieht immer alle Profile.
-        - Normale User (nicht Admin) sehen bei Detail-Ansichten nur ihr eigenes Profil.
-        - In der Listenansicht (action == 'list') gibt es für normale User dank get_permissions() kein Zugriff.
-        """
         if self.request.user.is_staff:
-            # Admin darf immer alle Profile sehen
             return Profile.objects.all()
         else:
-            # Normaler User sieht (bei Detail-Ansichten) nur das eigene Profil
             return Profile.objects.filter(user=self.request.user)
 
-
-
+    def retrieve(self, request, *args, **kwargs):
+        print("Logged in as:", request.user)
+        print("is_authenticated?:", request.user.is_authenticated)
+        print("is_staff?:", request.user.is_staff)
+        return super().retrieve(request, *args, **kwargs)
 
 
 
