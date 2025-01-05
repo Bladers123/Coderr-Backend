@@ -134,22 +134,25 @@ class BaseInfoView(APIView):
         return Response(serializer.data)
     
 
-    
+
 
 class ProfileViewSet(viewsets.ModelViewSet):
     serializer_class = ProfileSerializer
 
-    def get_queryset(self):
-        if self.request.user.is_staff:
-            return Profile.objects.all()
+    def get_permissions(self):
+        if self.action == 'list':
+            permission_classes = [IsAdminUser]
         else:
-            return Profile.objects.filter(user=self.request.user)
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
 
-    def retrieve(self, request, *args, **kwargs):
-        print("Logged in as:", request.user)
-        print("is_authenticated?:", request.user.is_authenticated)
-        print("is_staff?:", request.user.is_staff)
-        return super().retrieve(request, *args, **kwargs)
+    def get_queryset(self):
+        user = self.request.user
+        
+        if user.is_staff:
+            return Profile.objects.all()
+        # user ist authentifiziert, aber kein staff
+        return Profile.objects.filter(user=user)
 
 
 
