@@ -1,15 +1,13 @@
-from django.db.models.signals import post_save, post_delete
+from django.db.models.signals import post_save
 from django.dispatch import receiver
-from ..models import Order, OrderCount
+from django.conf import settings
+from ..models import Profile
 
-@receiver(post_save, sender=Order)
-@receiver(post_delete, sender=Order)
-def update_order_count(sender, instance, **kwargs):
-    business_user = instance.business_user
-    order_count = Order.objects.filter(business_user=business_user).count()
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance, username=instance.username, first_name=instance.first_name, last_name=instance.last_name, email=instance.email)
 
-    # Aktualisiere oder erstelle den OrderCount-Eintrag
-    OrderCount.objects.update_or_create(
-        business_user=business_user,
-        defaults={"order_count": order_count}
-    )
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
