@@ -1,12 +1,12 @@
 from rest_framework import serializers
 from ..models import BusinessProfile, CustomerProfile, Offer, OfferDetail, Order, Profile, Review
-from django.contrib.auth.models import User
+from authentication_app.models import CustomUser
 from ..models import FileUpload
 
 
 class UserDetailSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = CustomUser
         fields = ['first_name', 'last_name', 'username']
 
 class OfferDetailSerializer(serializers.ModelSerializer):
@@ -41,6 +41,7 @@ class OfferSerializer(serializers.ModelSerializer):
             'id', 'user', 'title', 'image', 'description', 'created_at',
             'updated_at', 'min_price', 'min_delivery_time', 'details', 'user_details'
         ]
+
 
     def create(self, validated_data):
         # Hier holen wir uns die "details"-Liste aus den validierten Daten
