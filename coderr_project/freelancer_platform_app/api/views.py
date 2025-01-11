@@ -29,12 +29,29 @@ class OfferViewSet(viewsets.ModelViewSet):
         context = super().get_serializer_context()
         context['action'] = self.action
         return context
-    
+
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         self.perform_destroy(instance)
         # Hier geben wir ein leeres Objekt zurück und ändern den Statuscode
         return Response({}, status=status.HTTP_200_OK)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return Response({
+                "count": self.paginator.page.paginator.count,
+                "results": serializer.data
+            })
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response({
+            "count": len(queryset),
+            "results": serializer.data
+        })
 
 
 
@@ -42,6 +59,25 @@ class OfferDetailViewSet(viewsets.ModelViewSet):
     queryset = OfferDetail.objects.select_related('offer').all()
     serializer_class = OfferDetailSerializer
     permission_classes = [IsAuthenticated]
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return Response({
+                "count": self.paginator.page.paginator.count,
+                "results": serializer.data
+            })
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response({
+            "count": len(queryset),
+            "results": serializer.data
+        })
+
+
 
 
 
