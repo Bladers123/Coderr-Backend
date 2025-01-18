@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models import BusinessProfile, CustomerProfile, Offer, OfferDetail, Order, Profile, Review
+from ..models import Offer, OfferDetail, Order, Profile, Review
 from authentication_app.models import CustomUser
 from ..models import FileUpload
 from ..models import models
@@ -7,7 +7,7 @@ from ..models import models
 class UserDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['first_name', 'last_name', 'username']
+        fields = ['pk', 'first_name', 'last_name', 'username']
 
 class OfferDetailSerializer(serializers.ModelSerializer):
     class Meta:
@@ -149,8 +149,6 @@ class BaseInfoSerializer(serializers.Serializer):
 
 
 
-
-
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
@@ -171,21 +169,34 @@ class ProfileSerializer(serializers.ModelSerializer):
         ]
 
 
-class BusinessProfileSerializer(ProfileSerializer):
-    class Meta(ProfileSerializer.Meta):
-        model = BusinessProfile
-        fields = ProfileSerializer.Meta.fields + [
-            'business_name',
+class BusinessProfileSerializer(serializers.ModelSerializer):
+    user = UserDetailSerializer()  # Verschachtelter Serializer für Benutzer
+
+    class Meta:
+        model = Profile  # Verwende das Profile-Modell
+        fields = [
+            'user',        # Verschachtelte Benutzerdaten
+            'file',        # Profilbild
+            'location',    # Standort
+            'tel',         # Telefonnummer
+            'description', # Beschreibung
+            'working_hours', # Arbeitszeiten
+            'type',        # Profiltyp (business/customer)
         ]
 
 
-class CustomerProfileSerializer(ProfileSerializer):
-    class Meta(ProfileSerializer.Meta):
-        model = CustomerProfile
-        fields = ProfileSerializer.Meta.fields + [
-            'uploaded_at',
-            'customer_name',
+class CustomerProfileSerializer(serializers.ModelSerializer):
+    user = UserDetailSerializer()  # Verschachtelter Serializer für Benutzer
+
+    class Meta:
+        model = Profile
+        fields = [
+            'user',        # Benutzerinformationen
+            'file',        # Profilbild
+            'uploaded_at', # Hochladezeit
+            'type',        # Profiltyp (customer)
         ]
+
 
 
 class ReviewSerializer(serializers.ModelSerializer):

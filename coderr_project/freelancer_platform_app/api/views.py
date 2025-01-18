@@ -1,6 +1,6 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
-from ..models import BusinessProfile, CustomerProfile, Offer, OfferDetail, Order, Profile, Review
+from ..models import Offer, OfferDetail, Order, Profile, Review
 from .serializers import BaseInfoSerializer, BusinessProfileSerializer, CompletedOrderCountSerializer, CustomerProfileSerializer, OfferSerializer, OfferDetailSerializer, FileUploadSerializer, OrderCountSerializer, OrderSerializer, ProfileSerializer, ReviewSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
@@ -190,18 +190,20 @@ class ProfileViewSet(viewsets.ModelViewSet):
         # user ist authentifiziert, aber kein staff
         return Profile.objects.filter(user=user)
 
-
-
 class BusinessProfileViewSet(viewsets.ModelViewSet):
-    queryset = BusinessProfile.objects.all()
     serializer_class = BusinessProfileSerializer
 
-
+    def get_queryset(self):
+        # Filtert nur Profile mit type='business'
+        return Profile.objects.filter(type='business')
+    
 
 class CustomerProfileViewSet(viewsets.ModelViewSet):
-    queryset = CustomerProfile.objects.all()
     serializer_class = CustomerProfileSerializer
 
+    def get_queryset(self):
+        # Filtert nur Profile mit type='customer'
+        return Profile.objects.filter(type='customer')
 
 
 
