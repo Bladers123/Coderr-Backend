@@ -2,7 +2,7 @@ from rest_framework import serializers
 from ..models import BusinessProfile, CustomerProfile, Offer, OfferDetail, Order, Profile, Review
 from authentication_app.models import CustomUser
 from ..models import FileUpload
-
+from ..models import models
 
 class UserDetailSerializer(serializers.ModelSerializer):
     class Meta:
@@ -34,6 +34,8 @@ class OfferDetailSerializer(serializers.ModelSerializer):
 class OfferSerializer(serializers.ModelSerializer):
     user_details = UserDetailSerializer(source='user', read_only=True)    
     details = OfferDetailSerializer(many=True)
+    min_price = serializers.SerializerMethodField()
+    min_delivery_time = serializers.SerializerMethodField()
 
     class Meta:
         model = Offer
@@ -41,6 +43,14 @@ class OfferSerializer(serializers.ModelSerializer):
             'id', 'user', 'title', 'image', 'description', 'created_at',
             'updated_at', 'min_price', 'min_delivery_time', 'details', 'user_details'
         ]
+
+    def get_min_price(self, obj):
+        min_price = obj.details.aggregate(models.Min('price'))['price__min']
+        return min_price if min_price is not None else 0.00
+
+    def get_min_delivery_time(self, obj):
+        min_delivery_time = obj.details.aggregate(models.Min('delivery_time_in_days'))['delivery_time_in_days__min']
+        return min_delivery_time if min_delivery_time is not None else 0
 
 
     def create(self, validated_data):

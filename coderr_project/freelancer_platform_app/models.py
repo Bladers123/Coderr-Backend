@@ -26,6 +26,25 @@ class Offer(models.Model):
     min_delivery_time = models.IntegerField(help_text="Minimum delivery time in days", default=1)
     image = models.ForeignKey(FileUpload, on_delete=models.SET_NULL, null=True, blank=True)
 
+    def update_min_values(self):
+        """
+        Aktualisiert min_price und min_delivery_time basierend auf den zugehörigen OfferDetails.
+        """
+        # Berechnung von min_price
+        min_price = self.details.aggregate(models.Min('price'))['price__min']
+        self.min_price = min_price if min_price is not None else 0.00
+
+        # Berechnung von min_delivery_time
+        min_delivery_time = self.details.aggregate(models.Min('delivery_time_in_days'))['delivery_time_in_days__min']
+        self.min_delivery_time = min_delivery_time if min_delivery_time is not None else 0
+
+    def save(self, *args, **kwargs):
+        # Aktualisiere min_price und min_delivery_time vor dem Speichern
+        self.update_min_values()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
 
     def __str__(self):
         return self.title
