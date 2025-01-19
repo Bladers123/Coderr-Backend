@@ -39,9 +39,16 @@ class Offer(models.Model):
         self.min_delivery_time = min_delivery_time if min_delivery_time is not None else 0
 
     def save(self, *args, **kwargs):
-        # Aktualisiere min_price und min_delivery_time vor dem Speichern
-        self.update_min_values()
+        # Der eigentliche Speichervorgang wird zuerst ausgeführt.
+        # So wird sichergestellt, dass dieses Offer-Objekt eine PK hat.
         super().save(*args, **kwargs)
+        
+        # Nun, da self.pk vorhanden ist, kann man sicher auf self.details zugreifen.
+        self.update_min_values()
+        # Danach das Offer erneut speichern,
+        # damit min_price und min_delivery_time nun gesetzt werden.
+        super().save(update_fields=['min_price', 'min_delivery_time'])
+
 
     def __str__(self):
         return self.title
