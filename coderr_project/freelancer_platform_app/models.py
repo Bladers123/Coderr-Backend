@@ -103,31 +103,14 @@ class Profile(models.Model):
     tel = models.CharField(max_length=20, blank=True)
     description = models.TextField(blank=True)
     working_hours = models.CharField(max_length=255, blank=True)
-    type = models.CharField(max_length=20, choices=[('business', 'Business'), ('customer', 'Customer')], default='customer')
     email = models.EmailField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     uploaded_at = models.DateTimeField(auto_now=True)
+    type = models.CharField(max_length=20, choices=[('business', 'Business'), ('customer', 'Customer')], default='customer')  # Wieder hinzugefügt
+
 
     def __str__(self):
         return f"{self.username} ({self.type})"
-
-# class BusinessProfile(Profile):
-#     # business_name = models.CharField(max_length=255)
-
-#     def save(self, *args, **kwargs):
-#         self.type = 'business'
-#         super().save(*args, **kwargs)
-
-
-# class CustomerProfile(Profile):
-#     uploaded_at = models.DateTimeField(auto_now_add=True)
-#     # customer_name = models.CharField(max_length=255)
-
-#     def save(self, *args, **kwargs):
-#         self.type = 'customer'
-#         super().save(*args, **kwargs)
-
-
 
 
 

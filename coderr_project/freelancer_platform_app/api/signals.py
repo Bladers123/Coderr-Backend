@@ -1,6 +1,8 @@
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.conf import settings
+
+from authentication_app.models import CustomUser
 from ..models import OfferDetail, Profile
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
@@ -25,3 +27,13 @@ def update_offer_min_values(sender, instance, **kwargs):
         offer = instance.offer
         offer.update_min_values()
         offer.save()
+
+
+
+
+@receiver(post_save, sender=CustomUser)
+def sync_profile_type(sender, instance, **kwargs):
+    # Synchronisiere das `type`-Feld im Profile-Modell mit dem CustomUser
+    if hasattr(instance, 'profile'):  # Überprüfen, ob das Profil existiert
+        instance.profile.type = instance.type
+        instance.profile.save()

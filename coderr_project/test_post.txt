@@ -52,6 +52,166 @@ post offer:
   ]
 }
 
+{
+  "title": "Webentwicklung-Paket",
+  "image": null,
+  "description": "Ein umfassendes Paket für moderne und responsive Webentwicklung.",
+  "details": [
+    {
+      "title": "BasicWeb",
+      "revisions": 2,
+      "delivery_time_in_days": 7,
+      "price": 800.00,
+      "features": ["One-Page-Webseite", "Responsive Design"],
+      "offer_type": "basic"
+    },
+    {
+      "title": "StandardWeb",
+      "revisions": 5,
+      "delivery_time_in_days": 14,
+      "price": 1500.00,
+      "features": ["Multi-Page-Webseite", "Responsive Design", "Kontaktformular"],
+      "offer_type": "standard"
+    },
+    {
+      "title": "PremiumWeb",
+      "revisions": 10,
+      "delivery_time_in_days": 21,
+      "price": 3000.00,
+      "features": ["Multi-Page-Webseite", "Custom CMS", "SEO-Optimierung", "Technische Dokumentation"],
+      "offer_type": "premium"
+    }
+  ]
+}
+
+{
+  "title": "Mobile App-Paket",
+  "image": null,
+  "description": "Ein Paket für die Entwicklung mobiler Apps, die auf iOS und Android funktionieren.",
+  "details": [
+    {
+      "title": "BasicApp",
+      "revisions": 3,
+      "delivery_time_in_days": 15,
+      "price": 3000.00,
+      "features": ["Cross-Platform App", "Basis-UI/UX Design"],
+      "offer_type": "basic"
+    },
+    {
+      "title": "StandardApp",
+      "revisions": 5,
+      "delivery_time_in_days": 30,
+      "price": 5000.00,
+      "features": ["Cross-Platform App", "Erweiterte UI/UX", "API-Integration"],
+      "offer_type": "standard"
+    },
+    {
+      "title": "PremiumApp",
+      "revisions": 10,
+      "delivery_time_in_days": 60,
+      "price": 10000.00,
+      "features": ["Native iOS & Android Apps", "Erweiterte API-Integration", "Push-Benachrichtigungen", "App Store Veröffentlichung"],
+      "offer_type": "premium"
+    }
+  ]
+}
+
+{
+  "title": "API-Entwicklung-Paket",
+  "image": null,
+  "description": "Ein Paket für die Entwicklung und Integration von APIs.",
+  "details": [
+    {
+      "title": "BasicAPI",
+      "revisions": 2,
+      "delivery_time_in_days": 10,
+      "price": 1000.00,
+      "features": ["REST API Entwicklung", "Basis-Dokumentation"],
+      "offer_type": "basic"
+    },
+    {
+      "title": "StandardAPI",
+      "revisions": 5,
+      "delivery_time_in_days": 20,
+      "price": 2000.00,
+      "features": ["REST API Entwicklung", "Authentifizierung (z. B. OAuth)", "Fehlerbehandlung"],
+      "offer_type": "standard"
+    },
+    {
+      "title": "PremiumAPI",
+      "revisions": 10,
+      "delivery_time_in_days": 30,
+      "price": 4000.00,
+      "features": ["REST API + GraphQL", "Sicherheitsprüfungen", "Performance-Optimierung", "Technische Dokumentation"],
+      "offer_type": "premium"
+    }
+  ]
+}
+
+{
+  "title": "E-Commerce-Paket",
+  "image": null,
+  "description": "Ein Paket für die Erstellung und Optimierung von Online-Shops.",
+  "details": [
+    {
+      "title": "BasicShop",
+      "revisions": 2,
+      "delivery_time_in_days": 14,
+      "price": 2000.00,
+      "features": ["Einfacher Online-Shop", "Produkte hinzufügen", "Responsive Design"],
+      "offer_type": "basic"
+    },
+    {
+      "title": "StandardShop",
+      "revisions": 5,
+      "delivery_time_in_days": 30,
+      "price": 4000.00,
+      "features": ["Online-Shop mit Warenkorb", "Zahlungsintegration", "SEO-Grundlagen"],
+      "offer_type": "standard"
+    },
+    {
+      "title": "PremiumShop",
+      "revisions": 10,
+      "delivery_time_in_days": 60,
+      "price": 8000.00,
+      "features": ["Komplexer Online-Shop", "Individuelles Design", "Mehrsprachigkeit", "Analytics-Integration"],
+      "offer_type": "premium"
+    }
+  ]
+}
+
+{
+  "title": "Full-Stack Entwicklungspaket",
+  "image": null,
+  "description": "Ein Rundum-sorglos-Paket für Backend- und Frontend-Entwicklung.",
+  "details": [
+    {
+      "title": "BasicFullStack",
+      "revisions": 3,
+      "delivery_time_in_days": 20,
+      "price": 4000.00,
+      "features": ["Frontend-Entwicklung", "Einfaches Backend", "Datenbankanbindung"],
+      "offer_type": "basic"
+    },
+    {
+      "title": "StandardFullStack",
+      "revisions": 5,
+      "delivery_time_in_days": 40,
+      "price": 7000.00,
+      "features": ["Frontend-Entwicklung", "Backend mit API", "Authentifizierung", "Datenbank-Optimierung"],
+      "offer_type": "standard"
+    },
+    {
+      "title": "PremiumFullStack",
+      "revisions": 10,
+      "delivery_time_in_days": 60,
+      "price": 12000.00,
+      "features": ["Komplexes Frontend & Backend", "Cloud-Hosting-Setup", "Skalierbare Architektur", "Komplette Dokumentation"],
+      "offer_type": "premium"
+    }
+  ]
+}
+
 
 
  post review:

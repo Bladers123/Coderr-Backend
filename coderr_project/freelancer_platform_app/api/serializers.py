@@ -27,10 +27,6 @@ class OfferDetailSerializer(serializers.ModelSerializer):
         return data
 
 
-
-
-
-
 class OfferSerializer(serializers.ModelSerializer):
     user_details = UserDetailSerializer(source='user', read_only=True)    
     details = OfferDetailSerializer(many=True)
@@ -150,6 +146,8 @@ class BaseInfoSerializer(serializers.Serializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
+    type = serializers.CharField(source='user.type', read_only=True)
+
     class Meta:
         model = Profile
         fields = [
@@ -163,9 +161,9 @@ class ProfileSerializer(serializers.ModelSerializer):
             'tel',
             'description',
             'working_hours',
-            'type',
             'email',
             'created_at',
+            'type',
         ]
 
 
