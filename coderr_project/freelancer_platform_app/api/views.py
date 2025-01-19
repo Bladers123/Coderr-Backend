@@ -177,6 +177,7 @@ class BaseInfoView(APIView):
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
+    queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
 
     def get_permissions(self):
@@ -186,13 +187,13 @@ class ProfileViewSet(viewsets.ModelViewSet):
             permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
 
-    def get_queryset(self):
-        user = self.request.user
+    # def get_queryset(self):
+    #     user = self.request.user
         
-        if user.is_staff:
-            return Profile.objects.all()
-        # user ist authentifiziert, aber kein staff
-        return Profile.objects.filter(user=user)
+    #     if user.is_staff:
+    #         return Profile.objects.all()
+    #     # user ist authentifiziert, aber kein staff
+    #     return Profile.objects.filter(user=user)
 
 class BusinessProfileViewSet(viewsets.ModelViewSet):
     serializer_class = BusinessProfileSerializer
