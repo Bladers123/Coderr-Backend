@@ -53,6 +53,10 @@ class OfferViewSet(viewsets.ModelViewSet):
             "results": serializer.data
         })
 
+    def perform_create(self, serializer):
+        # Hier überschreiben wir den user-Feldwert und setzen ihn 
+        # auf den aktuell eingeloggten Benutzer (request.user).
+        serializer.save(user=self.request.user)
 
 
 class OfferDetailViewSet(viewsets.ModelViewSet):
