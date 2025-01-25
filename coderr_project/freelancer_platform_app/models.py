@@ -6,7 +6,7 @@ from authentication_app.models import CustomUser
 
 
 
-# User = get_user_model()
+
 
 
 class FileUpload(models.Model):
@@ -71,7 +71,6 @@ class OfferDetail(models.Model):
 
 
 class Order(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='orders', default=1)
     customer_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='customer_orders')
     business_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='business_orders')
     title = models.CharField(max_length=255, default="Default Order Title")

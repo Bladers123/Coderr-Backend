@@ -105,8 +105,45 @@ class OrderViewSet(viewsets.ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         self.perform_destroy(instance)
-        # Hier geben wir ein leeres Objekt zurück und ändern den Statuscode
         return Response({}, status=status.HTTP_200_OK)
+    
+    def create(self, request, *args, **kwargs):
+        # Prüfe, ob `offer_detail_id` in der Anfrage vorhanden ist
+        offer_detail_id = request.data.get("offer_detail_id")
+        if not offer_detail_id:
+            return Response(
+                {"error": "Die ID des OfferDetails ist erforderlich."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Suche nach dem OfferDetail
+        try:
+            offer_detail = OfferDetail.objects.select_related('offer').get(id=offer_detail_id)
+        except OfferDetail.DoesNotExist:
+            return Response(
+                {"error": "Das angegebene OfferDetail existiert nicht."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        # Bereite die Daten aus dem OfferDetail vor
+        order_data = {
+            "customer_user": request.user.id,  # Kunde ist der aktuelle Benutzer
+            "business_user": offer_detail.offer.user.id,  # Anbieter aus Offer
+            "title": offer_detail.title,
+            "revisions": offer_detail.revisions,
+            "delivery_time_in_days": offer_detail.delivery_time_in_days,
+            "price": offer_detail.price,
+            "features": offer_detail.features,
+            "offer_type": offer_detail.offer_type,
+            "status": "in_progress",  # Standardstatus
+        }
+
+        # Serialisiere die Daten und erstelle die Bestellung
+        serializer = self.get_serializer(data=order_data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
 
