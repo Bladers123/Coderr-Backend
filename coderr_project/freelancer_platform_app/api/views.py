@@ -86,13 +86,13 @@ class OfferDetailViewSet(viewsets.ModelViewSet):
 
 
 class FileUploadView(APIView):
-    def post(self, request, format=None):
-        serializer = FileUploadSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
+    permission_classes = [IsAdminUser]
+   
+    def get(self, request, format=None):
+        # Alle Dateien abrufen
+        files = FileUpload.objects.all()
+        serializer = FileUploadSerializer(files, many=True)
+        return Response(serializer.data)
 
 
 
