@@ -10,7 +10,7 @@ from authentication_app.models import CustomUser
 
 
 class FileUpload(models.Model):
-    file = models.FileField(upload_to='uploads/')
+    image = models.FileField(upload_to='uploads/')
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
 

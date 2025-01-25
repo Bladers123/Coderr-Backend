@@ -224,13 +224,22 @@ class ProfileViewSet(viewsets.ModelViewSet):
             permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
 
-    # def get_queryset(self):
-    #     user = self.request.user
-        
-    #     if user.is_staff:
-    #         return Profile.objects.all()
-    #     # user ist authentifiziert, aber kein staff
-    #     return Profile.objects.filter(user=user)
+   
+    def partial_update(self, request, *args, **kwargs):
+        # Das aktuelle Profile-Objekt abrufen
+        profile = self.get_object()
+
+        # Datei-Upload prüfen und speichern
+        file_obj = request.FILES.get('file')
+        if file_obj:
+            # Neues FileUpload-Objekt erstellen
+            file_upload = FileUpload.objects.create(image=file_obj)
+            # Profile-Objekt mit dem neuen FileUpload verknüpfen
+            profile.file = file_upload
+            profile.save()  # Speichern, um die Änderung in die DB zu übernehmen
+
+        # Standard-Update-Logik von DRF aufrufen (für andere Felder)
+        return super().partial_update(request, *args, **kwargs)
 
 class BusinessProfileViewSet(viewsets.ModelViewSet):
     serializer_class = BusinessProfileSerializer

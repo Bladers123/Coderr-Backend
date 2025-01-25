@@ -114,10 +114,21 @@ class OfferSerializer(serializers.ModelSerializer):
 
 
 class FileUploadSerializer(serializers.ModelSerializer):
+    path = serializers.SerializerMethodField()  # Neues Feld für den Bildpfad
+
     class Meta:
         model = FileUpload
-        fields = ['file', 'uploaded_at']
+        fields = ['path']
 
+    def create(self, validated_data):
+        # Datei speichern
+        return FileUpload.objects.create(**validated_data)
+
+    def get_path(self, obj):
+        # Gib den relativen Pfad zur Datei zurück
+        if obj.image:
+            return obj.image.url  # z. B. "/media/uploads/example.pdf"
+        return None
 
 
 
@@ -147,6 +158,7 @@ class BaseInfoSerializer(serializers.Serializer):
 
 class ProfileSerializer(serializers.ModelSerializer):
     type = serializers.CharField(source='user.type', read_only=True)
+    file = serializers.SerializerMethodField()  # Neues Feld für den Pfad
 
     class Meta:
         model = Profile
@@ -156,7 +168,7 @@ class ProfileSerializer(serializers.ModelSerializer):
             'username',
             'first_name',
             'last_name',
-            'file',
+            'file',  # Hier wird jetzt nur der Pfad als String zurückgegeben
             'location',
             'tel',
             'description',
@@ -165,6 +177,15 @@ class ProfileSerializer(serializers.ModelSerializer):
             'created_at',
             'type',
         ]
+
+    def get_file(self, obj):
+        """
+        Gibt den Pfad der Datei zurück, oder None, wenn keine Datei vorhanden ist.
+        """
+        if obj.file and obj.file.image:  # Sicherstellen, dass eine Datei existiert
+            return obj.file.image.url  # Rückgabe des relativen Pfads (z. B. "/media/uploads/example.pdf")
+        return None  # Kein Bild hochgeladen
+
 
 
 class BusinessProfileSerializer(serializers.ModelSerializer):
