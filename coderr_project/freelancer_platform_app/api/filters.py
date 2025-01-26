@@ -1,6 +1,6 @@
 from django_filters import rest_framework as filters
-from ..models import Offer
-
+from ..models import Offer, Review
+import django_filters
 
 
 
@@ -13,3 +13,15 @@ class OfferFilter(filters.FilterSet):
     class Meta:
         model = Offer
         fields = ['creator_id', 'min_price', 'max_delivery_time']  # Existierende Felder im Modell
+
+
+
+
+class ReviewFilter(django_filters.FilterSet):
+    business_user_id = django_filters.NumberFilter(field_name="business_user_id", lookup_expr="exact")
+    reviewer_id = django_filters.NumberFilter(field_name="reviewer_id", lookup_expr="exact")
+
+    class Meta:
+        model = Review
+        fields = ['business_user_id', 'reviewer_id']
+

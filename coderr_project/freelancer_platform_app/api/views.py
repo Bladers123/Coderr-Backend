@@ -7,10 +7,11 @@ from rest_framework.response import Response
 from ..models import FileUpload
 from rest_framework.views import APIView
 from rest_framework import status
-from .filters import OfferFilter
+from .filters import OfferFilter, ReviewFilter
 from django.contrib.auth import get_user_model
 from rest_framework.exceptions import NotFound
 from .permissions import IsCustomer, IsBusiness
+from rest_framework.filters import OrderingFilter
 
 
 
@@ -262,7 +263,12 @@ class CustomerProfileViewSet(viewsets.ModelViewSet):
 class ReviewViewSet(viewsets.ModelViewSet):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-    permission_classes = [IsCustomer]
+    permission_classes = [IsCustomer, IsAuthenticated]
+    
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_class = ReviewFilter
+    ordering_fields = ['updated_at', 'rating']  # Sortierbare Felder
+    ordering = ['-updated_at']  # Standard-Sortierung
 
     def perform_create(self, serializer):
         # Setze den 'reviewer' auf den aktuell authentifizierten Benutzer
