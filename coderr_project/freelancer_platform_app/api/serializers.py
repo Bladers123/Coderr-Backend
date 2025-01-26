@@ -230,3 +230,15 @@ class ReviewSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at',
         ]
+        read_only_fields = ['reviewer']
+    
+    def validate(self, data):
+        request = self.context.get('request')
+        if request and request.method == 'POST':
+            reviewer = request.user
+            business_user = data.get('business_user')
+
+            # Prüfen, ob bereits eine Bewertung existiert
+            if Review.objects.filter(reviewer=reviewer, business_user=business_user).exists():
+                raise serializers.ValidationError("Du hast diesen Benutzer bereits bewertet.")
+        return data

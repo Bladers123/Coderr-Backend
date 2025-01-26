@@ -261,3 +261,7 @@ class CustomerProfileViewSet(viewsets.ModelViewSet):
 class ReviewViewSet(viewsets.ModelViewSet):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
+
+    def perform_create(self, serializer):
+        # Setze den 'reviewer' auf den aktuell authentifizierten Benutzer
+        serializer.save(reviewer=self.request.user)
