@@ -1,3 +1,4 @@
+from django.forms import ValidationError
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from ..models import Offer, OfferDetail, Order, Profile, Review
@@ -10,7 +11,7 @@ from rest_framework import status
 from .filters import OfferFilter, ReviewFilter
 from django.contrib.auth import get_user_model
 from rest_framework.exceptions import NotFound
-from .permissions import IsCustomer, IsBusiness
+from .permissions import IsCustomer, IsBusiness, IsOwnerOrAdmin
 from rest_framework.filters import OrderingFilter
 
 
@@ -158,9 +159,6 @@ class OrderCountView(APIView):
         # Berechne die Anzahl der Orders für den gegebenen business_user
         order_count = Order.objects.filter(business_user=pk).count()
 
-        if order_count == 0:
-            raise NotFound({"error": f"Business user not found"})
-
         # Erstelle die Daten
         data = {
             "order_count": order_count
@@ -171,16 +169,10 @@ class OrderCountView(APIView):
         return Response(serializer.data)
 
 
-
-
-
 class CompletedOrderCountView(APIView):
     def get(self, request, pk):
         # Zähle nur Orders mit Status 'completed' für den gegebenen business_user
         completed_order_count = Order.objects.filter(business_user=pk, status='completed').count()
-
-        if completed_order_count == 0:
-            raise NotFound({"error": f"No completed orders found for business_user with id {pk}"})
 
         # Erstelle die Daten
         data = {
@@ -190,6 +182,7 @@ class CompletedOrderCountView(APIView):
         # Nutze den Serializer zur Validierung und Ausgabe
         serializer = CompletedOrderCountSerializer(data)
         return Response(serializer.data)
+
     
 
 
@@ -261,15 +254,35 @@ class CustomerProfileViewSet(viewsets.ModelViewSet):
 
 
 class ReviewViewSet(viewsets.ModelViewSet):
+    """
+    Ein ViewSet, das alle Bewertungen anzeigt, erstellt, aktualisiert oder löscht.
+    """
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-    permission_classes = [IsCustomer, IsAuthenticated]
     
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = ReviewFilter
-    ordering_fields = ['updated_at', 'rating']  # Sortierbare Felder
-    ordering = ['-updated_at']  # Standard-Sortierung
+    ordering_fields = ['updated_at', 'rating']  # Erlaubte Sortierfelder
+    ordering = ['-updated_at']  # Standard-Sortierung (neueste zuerst)
+
+    def get_permissions(self):
+        """
+        Rückgabe der passenden Berechtigungen basierend auf der Methode.
+        """
+        if self.action in ['list', 'retrieve']:
+            # GET-Methoden: Keine Berechtigungen erforderlich
+            return [AllowAny()]  # Alle dürfen Bewertungen einsehen
+        elif self.action == 'create':
+            # POST-Methode: Nur Kunden dürfen Bewertungen erstellen
+            return [IsCustomer()]  # Nutzt die neue IsCustomer-Permission
+        elif self.action in ['update', 'partial_update', 'destroy']:
+            # PATCH/DELETE: Nur der Ersteller oder Admins dürfen Änderungen vornehmen
+            return [IsOwnerOrAdmin()]
+        return [AllowAny()]  # Fallback für andere Aktionen (falls nötig)
 
     def perform_create(self, serializer):
-        # Setze den 'reviewer' auf den aktuell authentifizierten Benutzer
+        """
+        Zusätzliche Logik beim Erstellen einer Bewertung.
+        """
+        # Den aktuellen Benutzer als Rezensent setzen
         serializer.save(reviewer=self.request.user)

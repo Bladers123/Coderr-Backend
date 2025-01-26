@@ -18,3 +18,11 @@ class IsBusiness(BasePermission):
         if not request.user.is_authenticated:
             return False
         return request.user.type == 'business'
+    
+    
+class IsOwnerOrAdmin(BasePermission):
+    """
+    Erlaubt Änderungen oder Löschungen nur für den Ersteller der Bewertung oder Admins.
+    """
+    def has_object_permission(self, request, view, obj):
+        return request.user == obj.reviewer or request.user.is_staff
