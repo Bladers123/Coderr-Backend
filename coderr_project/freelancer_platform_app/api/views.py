@@ -10,6 +10,7 @@ from rest_framework import status
 from .filters import OfferFilter
 from django.contrib.auth import get_user_model
 from rest_framework.exceptions import NotFound
+from .permissions import IsCustomer, IsBusiness
 
 
 
@@ -261,6 +262,7 @@ class CustomerProfileViewSet(viewsets.ModelViewSet):
 class ReviewViewSet(viewsets.ModelViewSet):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
+    permission_classes = [IsCustomer]
 
     def perform_create(self, serializer):
         # Setze den 'reviewer' auf den aktuell authentifizierten Benutzer
