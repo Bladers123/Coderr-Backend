@@ -13,6 +13,7 @@ from django.contrib.auth import get_user_model
 from rest_framework.exceptions import NotFound
 from .permissions import IsCustomer, IsBusiness, IsOwnerOrAdmin
 from rest_framework.filters import OrderingFilter
+from django.db import models
 
 
 
@@ -105,11 +106,21 @@ class OrderViewSet(viewsets.ModelViewSet):
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        """
+        Beschränkt das Queryset auf Bestellungen, bei denen der aktuelle Benutzer entweder der `customer_user` 
+        oder der `business_user` ist.
+        """
+        user = self.request.user
+        return Order.objects.filter(
+            models.Q(customer_user=user) | models.Q(business_user=user)
+        )
+
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         self.perform_destroy(instance)
         return Response({}, status=status.HTTP_200_OK)
-    
+
     def create(self, request, *args, **kwargs):
         # Prüfe, ob `offer_detail_id` in der Anfrage vorhanden ist
         offer_detail_id = request.data.get("offer_detail_id")
@@ -147,6 +158,7 @@ class OrderViewSet(viewsets.ModelViewSet):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     
 
 
