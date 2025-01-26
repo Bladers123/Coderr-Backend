@@ -108,10 +108,16 @@ class OrderViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         """
-        Beschränkt das Queryset auf Bestellungen, bei denen der aktuelle Benutzer entweder der `customer_user` 
-        oder der `business_user` ist.
+        Beschränkt das Queryset auf Bestellungen, bei denen der aktuelle Benutzer entweder der
+        `customer_user` oder der `business_user` ist. Ein Admin sieht jedoch alle Bestellungen.
         """
         user = self.request.user
+
+        # Admin-Benutzer sieht alle Bestellungen
+        if user.is_staff:
+            return Order.objects.all()
+
+        # Normale Benutzer sehen nur ihre eigenen Bestellungen
         return Order.objects.filter(
             models.Q(customer_user=user) | models.Q(business_user=user)
         )
@@ -198,24 +204,32 @@ class CompletedOrderCountView(APIView):
     
 
 
-
 class BaseInfoView(APIView):
     def get(self, request):
-        
-        # Anzahl der Offers
+        # Berechne die Anzahl der Bewertungen
+        review_count = Review.objects.count()
+
+        # Berechne den Durchschnitt der Bewertungen (falls keine vorhanden sind, auf 0 setzen)
+        average_rating = Review.objects.aggregate(avg_rating=models.Avg('rating'))['avg_rating'] or 0.0
+
+        # Berechne die Anzahl der Business-Profile
+        business_profile_count = Profile.objects.filter(type='business').count()
+
+        # Berechne die Anzahl der Offers
         offer_count = Offer.objects.count()
 
-        # Erstelle die Daten
+        # Erstelle die Antwortdaten
         data = {
+            "review_count": review_count,
+            "average_rating": round(average_rating, 1),  # Durchschnitts-Bewertung auf eine Dezimalstelle runden
+            "business_profile_count": business_profile_count,
             "offer_count": offer_count,
-            "review_count": 10,
-            "average_rating": 4.6,
-            "business_profile_count": 45,
         }
 
         # Nutze den Serializer zur Validierung und Ausgabe
         serializer = BaseInfoSerializer(data)
         return Response(serializer.data)
+
     
 
 
