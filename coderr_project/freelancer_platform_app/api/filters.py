@@ -1,6 +1,7 @@
 from django_filters import rest_framework as filters
 from ..models import Offer, Review
 import django_filters
+from rest_framework.filters import OrderingFilter
 
 
 
@@ -13,6 +14,18 @@ class OfferFilter(filters.FilterSet):
     class Meta:
         model = Offer
         fields = ['creator_id', 'min_price', 'max_delivery_time']  # Existierende Felder im Modell
+
+
+
+class Updated_atOrderingFilter(OrderingFilter):
+    def get_ordering(self, request, queryset, view):
+        ordering = request.query_params.get(self.ordering_param)
+        if ordering == 'updated_at':
+            # Wenn "updated_at" übergeben wird, kehren wir die Reihenfolge um:
+            return ['-updated_at']
+        elif ordering == '-updated_at':
+            return ['updated_at']
+        return super().get_ordering(request, queryset, view)
 
 
 

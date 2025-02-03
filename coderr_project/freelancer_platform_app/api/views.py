@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from ..models import FileUpload
 from rest_framework.views import APIView
 from rest_framework import status
-from .filters import OfferFilter, ReviewFilter
+from .filters import OfferFilter, ReviewFilter, Updated_atOrderingFilter
 from django.contrib.auth import get_user_model
 from rest_framework.exceptions import NotFound
 from .permissions import IsCustomer, IsBusiness, IsOwnerOrAdmin
@@ -25,7 +25,7 @@ class OfferViewSet(viewsets.ModelViewSet):
     queryset = Offer.objects.all()
     serializer_class = OfferSerializer
     permission_classes = [IsAuthenticated]
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, Updated_atOrderingFilter]
     filterset_class = OfferFilter
     ordering_fields = ['updated_at', 'min_price']
 
