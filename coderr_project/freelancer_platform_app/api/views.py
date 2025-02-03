@@ -1,6 +1,7 @@
 from django.forms import ValidationError
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
+from .pagination import OffersPagination
 from ..models import Offer, OfferDetail, Order, Profile, Review
 from .serializers import BaseInfoSerializer, BusinessProfileSerializer, CompletedOrderCountSerializer, CustomerProfileSerializer, OfferSerializer, OfferDetailSerializer, FileUploadSerializer, OrderCountSerializer, OrderSerializer, ProfileSerializer, ReviewSerializer
 from django_filters.rest_framework import DjangoFilterBackend
@@ -28,6 +29,7 @@ class OfferViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, Updated_atOrderingFilter]
     filterset_class = OfferFilter
     ordering_fields = ['updated_at', 'min_price']
+    pagination_class = OffersPagination
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
