@@ -1,4 +1,3 @@
-from django.contrib.auth import get_user_model
 from rest_framework.viewsets import ReadOnlyModelViewSet, GenericViewSet
 from .serializers import CustomUserSerializer, RegistrationSerializer, LoginSerializer
 from rest_framework.permissions import IsAdminUser
@@ -10,8 +9,6 @@ from rest_framework.generics import GenericAPIView
 from ..models import CustomUser
 
 
-User = get_user_model()
-
 
 class UserViewSet(ReadOnlyModelViewSet):
     queryset = CustomUser.objects.all()
@@ -19,7 +16,7 @@ class UserViewSet(ReadOnlyModelViewSet):
     permission_classes = [IsAdminUser]
 
 class RegistrationViewSet(CreateModelMixin, GenericViewSet):
-    queryset = User.objects.all()
+    queryset = CustomUser.objects.all()
     serializer_class = RegistrationSerializer
 
     def create(self, request, *args, **kwargs):
