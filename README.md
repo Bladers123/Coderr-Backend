@@ -54,20 +54,20 @@
 
 # Config vom Frontend:
 
-const GUEST_LOGINS = {
+- const GUEST_LOGINS = {
     customer : {
         username: 'andrey',
         password: 'asdasd'
     },
-    business : {
+-  business : {
         username: 'kevin',
         password: 'asdasd24'
     }
 }
 
 const API_BASE_URL = 'http://127.0.0.1:8000/api/';
-const STATIC_BASE_URL = 'http://127.0.0.1:8000/';
 
+const STATIC_BASE_URL = 'http://127.0.0.1:8000/';
 
 const LOGIN_URL = 'login/';
 
