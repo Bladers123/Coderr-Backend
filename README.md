@@ -1,4 +1,4 @@
-# Projekt-Setup-Anleitung für Python 3.12.7
+# Projekt-Setup-Anleitung für Python 3.12.9
 ## Diese Anleitung beschreibt die Schritte zur Installation und Konfiguration des Projekts mit Python 3.12.7.
 
 ## Installation und Einrichtung
@@ -6,7 +6,7 @@
 
 
 ### - Python-Version überprüfen
-  Stelle sicher, dass Python 3.12.7 installiert ist:
+  Stelle sicher, dass Python 3.12.9 installiert ist:
   **python --version**
 
 ### - Virtuelle Umgebung erstellen
