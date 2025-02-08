@@ -2,7 +2,7 @@
 ## Diese Anleitung beschreibt die Schritte zur Installation und Konfiguration des Projekts mit Python 3.12.7.
 
 ## Installation und Einrichtung
-  Lade dir VS-Code herunter und es das Programm und öffne über VS-Code das Projekt (Join-Backend). Öffne das Terminal.
+  Lade dir VS-Code herunter und öffne über VS-Code das Projekt (Join-Backend). Öffne das Terminal.
 
 
 ### - Python-Version überprüfen
