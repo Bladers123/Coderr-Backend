@@ -15,13 +15,10 @@ class OfferDetailSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'revisions', 'delivery_time_in_days', 'price', 'features', 'offer_type']
 
     def validate(self, data):
-        # Validierung der `revisions`
         if data['revisions'] < -1:
             raise serializers.ValidationError("Die Anzahl der Überarbeitungen muss -1 oder größer sein.")
-        # Validierung der `delivery_time_in_days`
         if data['delivery_time_in_days'] <= 0:
             raise serializers.ValidationError("Die Lieferzeit muss positiv sein.")
-        # Validierung der Features
         if not data['features']:
             raise serializers.ValidationError("Es muss mindestens ein Feature angegeben werden.")
         return data
@@ -50,27 +47,19 @@ class OfferSerializer(serializers.ModelSerializer):
 
 
     def create(self, validated_data):
-        # Hier holen wir uns die "details"-Liste aus den validierten Daten
         details_data = validated_data.pop('details', [])
-        # Erstellen das Offer
         offer = Offer.objects.create(**validated_data)
-        # Erstellen die OfferDetail-Einträge
         for detail_dict in details_data:
             OfferDetail.objects.create(offer=offer, **detail_dict)
         return offer
 
     def update(self, instance, validated_data):
-        # Falls du Updates an den Details erlauben willst, 
-        # müsstest du hier eine Logik implementieren.
         details_data = validated_data.pop('details', None)
-        
-        # Erst die restlichen Felder vom Offer updaten
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         instance.save()
         
         if details_data is not None:
-            # Beispiel: Alte Details löschen und neue erstellen
             instance.details.all().delete()
             for detail_dict in details_data:
                 OfferDetail.objects.create(offer=instance, **detail_dict)
@@ -78,14 +67,9 @@ class OfferSerializer(serializers.ModelSerializer):
         return instance
 
     def to_representation(self, instance):
-        """
-        Du kannst hier (optional) unterscheiden, ob du im 'list' oder 'retrieve'
-        bist, und die Ausgabe von `details` anpassen (Kurzinfo oder Vollformat).
-        """
         rep = super().to_representation(instance)
         action = self.context.get('action', '')
 
-        # get nach dem post
         if action == 'create':
             rep.pop('min_price', None)
             rep.pop('min_delivery_time', None)
@@ -94,16 +78,12 @@ class OfferSerializer(serializers.ModelSerializer):
             rep.pop('updated_at', None)
             rep.pop('user', None)
 
-        
-        # get von der liste
         elif action == 'list':
-            # Kurzformat => Nur ID + URL
             rep['details'] = [
                 {'id': d['id'], 'url': f"/offerdetails/{d['id']}/"}
                 for d in rep.get('details', [])
             ]
 
-        # get von einem einzelnen objekt
         elif action == 'retrieve':
             rep.pop('min_price', None)
             rep.pop('min_delivery_time', None)
@@ -111,33 +91,26 @@ class OfferSerializer(serializers.ModelSerializer):
         return rep
 
 
-
-
 class FileUploadSerializer(serializers.ModelSerializer):
-    path = serializers.SerializerMethodField()  # Neues Feld für den Bildpfad
+    path = serializers.SerializerMethodField()
 
     class Meta:
         model = FileUpload
         fields = ['path']
 
     def create(self, validated_data):
-        # Datei speichern
         return FileUpload.objects.create(**validated_data)
 
     def get_path(self, obj):
-        # Gib den relativen Pfad zur Datei zurück
         if obj.image:
-            return obj.image.url  # z. B. "/media/uploads/example.pdf"
+            return obj.image.url
         return None
-
 
 
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ['id', 'customer_user', 'business_user', 'title', 'revisions', 'delivery_time_in_days', 'price', 'features', 'offer_type', 'status', 'created_at', 'updated_at']
-
-
 
 
 class OrderCountSerializer(serializers.Serializer):
@@ -158,7 +131,7 @@ class BaseInfoSerializer(serializers.Serializer):
 
 class ProfileSerializer(serializers.ModelSerializer):
     type = serializers.CharField(source='user.type', read_only=True)
-    file = serializers.SerializerMethodField()  # Neues Feld für den Pfad
+    file = serializers.SerializerMethodField() 
 
     class Meta:
         model = Profile
@@ -168,7 +141,7 @@ class ProfileSerializer(serializers.ModelSerializer):
             'username',
             'first_name',
             'last_name',
-            'file',  # Hier wird jetzt nur der Pfad als String zurückgegeben
+            'file', 
             'location',
             'tel',
             'description',
@@ -182,38 +155,38 @@ class ProfileSerializer(serializers.ModelSerializer):
         """
         Gibt den Pfad der Datei zurück, oder None, wenn keine Datei vorhanden ist.
         """
-        if obj.file and obj.file.image:  # Sicherstellen, dass eine Datei existiert
-            return obj.file.image.url  # Rückgabe des relativen Pfads (z. B. "/media/uploads/example.pdf")
-        return None  # Kein Bild hochgeladen
+        if obj.file and obj.file.image:  
+            return obj.file.image.url  
+        return None 
 
 
 
 class BusinessProfileSerializer(serializers.ModelSerializer):
-    user = UserDetailSerializer()  # Verschachtelter Serializer für Benutzer
+    user = UserDetailSerializer()
 
     class Meta:
-        model = Profile  # Verwende das Profile-Modell
+        model = Profile 
         fields = [
-            'user',        # Verschachtelte Benutzerdaten
-            'file',        # Profilbild
-            'location',    # Standort
-            'tel',         # Telefonnummer
-            'description', # Beschreibung
-            'working_hours', # Arbeitszeiten
-            'type',        # Profiltyp (business/customer)
+            'user',        
+            'file',        
+            'location',    
+            'tel',         
+            'description', 
+            'working_hours', 
+            'type',        
         ]
 
 
 class CustomerProfileSerializer(serializers.ModelSerializer):
-    user = UserDetailSerializer()  # Verschachtelter Serializer für Benutzer
+    user = UserDetailSerializer() 
 
     class Meta:
         model = Profile
         fields = [
-            'user',        # Benutzerinformationen
-            'file',        # Profilbild
-            'uploaded_at', # Hochladezeit
-            'type',        # Profiltyp (customer)
+            'user',       
+            'file',        
+            'uploaded_at', 
+            'type',        
         ]
 
 
@@ -238,7 +211,6 @@ class ReviewSerializer(serializers.ModelSerializer):
             reviewer = request.user
             business_user = data.get('business_user')
 
-            # Prüfen, ob bereits eine Bewertung existiert
             if Review.objects.filter(reviewer=reviewer, business_user=business_user).exists():
                 raise serializers.ValidationError("Du hast diesen Benutzer bereits bewertet.")
         return data

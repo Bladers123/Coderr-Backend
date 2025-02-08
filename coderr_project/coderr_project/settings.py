@@ -152,14 +152,7 @@ REST_FRAMEWORK = {
     ],
 }
 
-
 CORS_ALLOWED_ORIGINS = [
-    "http://127.0.0.1:5500",  # Dein Frontend
-    "http://localhost:5500",  # Alternativer Zugriff
+    "http://127.0.0.1:5500",  
+    "http://localhost:5500", 
 ]
-
-
-# REST_FRAMEWORK = {
-#     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-#     'PAGE_SIZE': 1000,  # Standardwert, kann durch den Query-Parameter überschrieben werden
-# }

@@ -6,14 +6,14 @@ from rest_framework.filters import OrderingFilter
 
 
 class OfferFilter(filters.FilterSet):
-    creator_id = filters.NumberFilter(field_name='user__id', lookup_expr='exact')  # Benutzer-ID (indirekt über user)
-    min_price = filters.NumberFilter(field_name='min_price', lookup_expr='gte')  # Mindestpreis
-    max_delivery_time = filters.NumberFilter(field_name='min_delivery_time', lookup_expr='lte')  # minimale Lieferzeit
-    search = filters.CharFilter(field_name='title', lookup_expr='icontains')  # Sucht nach dem Titel
+    creator_id = filters.NumberFilter(field_name='user__id', lookup_expr='exact') 
+    min_price = filters.NumberFilter(field_name='min_price', lookup_expr='gte')
+    max_delivery_time = filters.NumberFilter(field_name='min_delivery_time', lookup_expr='lte') 
+    search = filters.CharFilter(field_name='title', lookup_expr='icontains')
 
     class Meta:
         model = Offer
-        fields = ['creator_id', 'min_price', 'max_delivery_time']  # Existierende Felder im Modell
+        fields = ['creator_id', 'min_price', 'max_delivery_time']
 
 
 
@@ -21,7 +21,6 @@ class Updated_atOrderingFilter(OrderingFilter):
     def get_ordering(self, request, queryset, view):
         ordering = request.query_params.get(self.ordering_param)
         if ordering == 'updated_at':
-            # Wenn "updated_at" übergeben wird, kehren wir die Reihenfolge um:
             return ['-updated_at']
         elif ordering == '-updated_at':
             return ['updated_at']

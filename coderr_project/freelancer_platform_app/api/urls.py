@@ -6,8 +6,6 @@ from django.conf.urls.static import static
 from .views import FileUploadView
 
 
-
-
 router = routers.DefaultRouter()
 
 

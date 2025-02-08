@@ -1,4 +1,3 @@
-from django.forms import ValidationError
 from rest_framework import serializers
 from rest_framework.exceptions import AuthenticationFailed
 from django.contrib.auth import authenticate
@@ -13,13 +12,13 @@ class CustomUserSerializer(serializers.ModelSerializer):
             field.name
             for field in CustomUser._meta.get_fields()
             if not field.is_relation or field.one_to_one or field.many_to_one
-        ]  # Nur konkrete Felder (keine umgekehrten Relationen)
+        ] 
 
 
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
-    repeated_password = serializers.CharField(write_only=True)  # Nicht in der DB, nur für die Eingabe
+    repeated_password = serializers.CharField(write_only=True)
 
     class Meta:
         model = CustomUser
@@ -57,7 +56,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
         return data
 
     def create(self, validated_data):
-        # Entferne `repeated_password`, da es nicht im Model existiert
         validated_data.pop('repeated_password')
         user = CustomUser.objects.create_user(
             username=validated_data['username'],
