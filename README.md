@@ -1,5 +1,5 @@
 # Projekt-Setup-Anleitung für Python 3.12.9
-## Diese Anleitung beschreibt die Schritte zur Installation und Konfiguration des Projekts mit Python 3.12.7.
+## Diese Anleitung beschreibt die Schritte zur Installation und Konfiguration des Projekts mit Python 3.12.9.
 
 ## Installation und Einrichtung
   Lade dir VS-Code herunter und öffne über VS-Code das Projekt (Join-Backend). Öffne das Terminal.
@@ -30,6 +30,9 @@
  - **python -m pip install Django**  # Installiert Django
  - **pip install djangorestframework**  # Installiert Django REST Framework
  - **python -m pip install django-cors-headers**  # Installiert django-cors-headers für externen Zugriff
+
+### - Navigiere ins Projektverzeichnis:
+  - **cd projektname**
 
 ### - Datenbankmigrationen durchführen
   - Erstelle Migrationsdateien basierend auf den Modellen in models.py:
