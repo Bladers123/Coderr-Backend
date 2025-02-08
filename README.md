@@ -54,12 +54,12 @@
 
 # Config vom Frontend:
 
-- const GUEST_LOGINS = {
+const GUEST_LOGINS = {
     customer : {
         username: 'andrey',
         password: 'asdasd'
     },
--  business : {
+    business : {
         username: 'kevin',
         password: 'asdasd24'
     }
