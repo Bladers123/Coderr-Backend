@@ -26,6 +26,11 @@ class OfferViewSet(viewsets.ModelViewSet):
     ordering_fields = ['updated_at', 'min_price']
     pagination_class = OffersPagination
 
+    def get_permissions(self):
+        if self.action in ['list']:
+            return [AllowAny()]
+        return [IsAuthenticated()]
+
     def get_serializer_context(self):
         context = super().get_serializer_context()
         context['action'] = self.action
@@ -112,18 +117,12 @@ class OrderViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         offer_detail_id = request.data.get("offer_detail_id")
         if not offer_detail_id:
-            return Response(
-                {"error": "Die ID des OfferDetails ist erforderlich."},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+            return Response({"error": "Die ID des OfferDetails ist erforderlich."}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             offer_detail = OfferDetail.objects.select_related('offer').get(id=offer_detail_id)
         except OfferDetail.DoesNotExist:
-            return Response(
-                {"error": "Das angegebene OfferDetail existiert nicht."},
-                status=status.HTTP_404_NOT_FOUND
-            )
+            return Response({"error": "Das angegebene OfferDetail existiert nicht."}, status=status.HTTP_404_NOT_FOUND)
 
         order_data = {
             "customer_user": request.user.id, 
@@ -144,16 +143,18 @@ class OrderViewSet(viewsets.ModelViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+
 class OrderCountView(APIView):
     def get(self, request, pk):
         order_count = Order.objects.filter(business_user=pk).count()
+        
+        if order_count == 0:
+            return Response({"error": "Business user not found."}, status=status.HTTP_404_NOT_FOUND)
 
-        data = {
-            "order_count": order_count
-        }
-
+        data = {"order_count": order_count}
         serializer = OrderCountSerializer(data)
         return Response(serializer.data)
+
 
 
 class CompletedOrderCountView(APIView):

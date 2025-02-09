@@ -83,11 +83,6 @@ class OfferSerializer(serializers.ModelSerializer):
                 {'id': d['id'], 'url': f"/offerdetails/{d['id']}/"}
                 for d in rep.get('details', [])
             ]
-
-        elif action == 'retrieve':
-            rep.pop('min_price', None)
-            rep.pop('min_delivery_time', None)
-            rep.pop('user_details', None)
         return rep
 
 
