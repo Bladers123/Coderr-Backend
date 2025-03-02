@@ -31,7 +31,8 @@ SECRET_KEY = 'django-insecure-_r2-ost(co0*_amr%l135cn&ne-8hsp+x6_(k!y%!1#p$xj8@g
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+'localhost', '127.0.0.1', '35.198.191.68', 'coderr-api.tristan-gehring.com']
 
 
 # Application definition
@@ -129,7 +130,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
